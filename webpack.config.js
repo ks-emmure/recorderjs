@@ -2,11 +2,14 @@
 const path = require('path');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const cleanWebpackPlugin = require('clean-webpack-plugin');
+const RuntimeAnalyzerPlugin = require('webpack-runtime-analyzer');
+const webpack = require('webpack');
 module.exports = {
     entry: path.join(__dirname,'src/index.js'),
     output: {
         path: path.resolve(__dirname ,'dist'),
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
+        chunkFilename: '[name].bundle.js',
     },
     module: {
         rules: [
@@ -41,13 +44,29 @@ module.exports = {
                         attrs: ['img:src']
                     }
                 }
-            }
+            },
+            {
+                test: /\.pug/,
+                use: {
+                    loader: 'pug-loader',
+                }
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                use: [
+                    'file-loader',
+                ]
+            },
         ]
     },
     plugins: [
      new htmlWebpackPlugin({
-        title: 'testplugin'
-     })
+        template: path.join(__dirname,'src/index.pug')
+    }),
+    new RuntimeAnalyzerPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+       name: 'common'
+     }),
     ],
     devServer: {
       contentBase: path.resolve(__dirname ,'dist'),
