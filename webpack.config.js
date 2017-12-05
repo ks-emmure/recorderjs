@@ -1,13 +1,18 @@
 'use strict';
+const ENV = process.env.WEBPACK_ENV || 'dev';
 const path = require('path');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const cleanWebpackPlugin = require('clean-webpack-plugin');
 const RuntimeAnalyzerPlugin = require('webpack-runtime-analyzer');
 const webpack = require('webpack');
+
+console.log("\r\n\r\n ============================\r\n\r\n");
+console.log(" Environment: " + ENV);
+console.log("\r\n\r\n ============================\r\n\r\n");
 module.exports = {
     entry: path.join(__dirname,'src/index.js'),
     output: {
-        path: path.resolve(__dirname ,'dist'),
+        path: path.resolve(__dirname ,ENV !=='prod' ? 'dist':''),
         filename: '[name].bundle.js',
         chunkFilename: '[name].bundle.js',
     },
@@ -57,6 +62,12 @@ module.exports = {
                     'file-loader',
                 ]
             },
+            {
+                test: /\.(mp3)$/,
+                use: [
+                    'file-loader',
+                ]
+            },
         ]
     },
     plugins: [
@@ -71,9 +82,11 @@ module.exports = {
     devServer: {
       contentBase: path.resolve(__dirname ,'dist'),
     },
+    devtool: "inline-cheap-module-source-map",
     resolve: {
         alias: {
-            assets: path.resolve(__dirname, 'src/assets')
+            assets: path.resolve(__dirname, 'src/assets'),
+            app: path.resolve(__dirname, 'src/app')
         }
     }
 }

@@ -1,3 +1,18 @@
 body {
-  background-color: #f00;
+  background-color: #707070;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  width: 100vw;
+  height: 100vh;
 }
+audio {
+  margin: 20px;
+}
+/*audio {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}*/
